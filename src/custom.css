@@ -1,0 +1,258 @@
+/*
+Copyright (c) 2025 Toshiba Digital Solutions Corporation.
+This source code is licensed under the MIT license.
+*/
+
+a {
+    text-decoration: none;
+}
+
+.btn-group-xs > .btn, .btn-xs {
+  padding: .25rem .4rem;
+  font-size: .875rem;
+  line-height: .5;
+  border-radius: .2rem;
+}
+
+.id-tag {
+    display: inline-block;
+    vertical-align: bottom;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.id-ids {
+    max-width: 100%;
+    margin-right: 10px;
+}
+
+.id-lst-long {
+    max-width: 100px;
+}
+
+.id-lst-long2 {
+    max-width: 60px;
+}
+
+.id-rcn {
+    width: 75%;
+    float: left;
+}
+
+.id-rcn-2 {
+    width: 40%;
+    margin-left: 10px;
+    float: left;
+}
+
+.ago-rcn {
+    margin-right: 10px;
+    float: right;
+}
+
+@media (min-width: 768px) {
+    .modal-lg {
+        width: 740px;
+    }
+
+    .id-lst-long {
+        max-width: 360px;
+    }
+
+    .id-lst-long2 {
+        max-width: 220px;
+    }
+
+    .id-rcn {
+        width: 60%;
+    }
+}
+
+@media (min-width: 992px) {
+    .modal-lg {
+        width: 920px;
+    }
+
+    .id-lst-long {
+        max-width: 430px;
+    }
+
+    .id-lst-long2 {
+        max-width: 330px;
+    }
+
+    .id-rcn {
+        width: 65%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .modal-lg {
+        width: 1020px;
+    }
+
+    .id-lst-long {
+        max-width: 550px;
+    }
+
+    .id-lst-long2 {
+        max-width: 430px;
+    }
+
+    .id-rcn {
+        width: 75%;
+    }
+}
+
+.inline {
+    display: inline;
+}
+
+input[type=checkbox][disabled]+span {
+    color: #ccc;
+}
+
+.panel-line0 {
+    background: white;
+    border-left: 2px solid #ff8c40;
+    margin-bottom: 2px;
+    padding: 7px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.panel-line1 {
+    background: white;
+    border-left: 2px solid black;
+    margin-bottom: 2px;
+    padding: 7px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.overflow-wrap-break-word {
+    overflow-wrap: break-word;
+}
+
+.header-title {
+    font-size: 20px;
+    line-height: 1.8;
+}
+
+.header-id {
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.mCSB {
+    height: 250px;
+    padding: 0px;
+    overflow: auto;
+    background: #f5f5f5;
+}
+
+.thin-horizontal-scrollbar {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    height: initial;
+    scrollbar-width: thin;
+}
+
+.jumbotron {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    background-color: #eee;
+}
+
+.button-margin {
+    margin-bottom: 20px;
+}
+
+.comp-box {
+    display: inline-block;
+    padding: 2px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+}
+
+textarea {
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 100px;
+    max-height: 900px;
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+}
+
+.pre-desc {
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+    border: none;
+    white-space: pre-wrap;
+}
+
+.text-editor {
+    height: 400px;
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.alert font {
+    color: black;
+}
+
+.table-fixed-layout {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.modal-body {
+    word-wrap: break-word;
+}
+
+[name=view_more],
+[name=view_more_after],
+[name=view_more_before] {
+    cursor: pointer;
+}
+
+.val_header {
+    cursor: pointer;
+    display: inline;
+}
+
+body {
+    overscroll-behavior-y: none;
+}
+
+.table-striped tr:hover td {
+    background-color: #d9efff;
+}
+
+.table-tx-detail-list tbody:hover td {
+    background-color: #d9efff;
+}
+
+.table>thead>tr>th {
+    border-bottom: 2px solid #ddd;
+}
+
+.thead-sticky {
+    position: sticky;
+    top: 50px;
+    z-index: 1;
+    background-color: #eee;
+}
+
+.badge-frozen {
+    background-color: #368bc1;
+}

@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2025 Toshiba Digital Solutions Corporation.
+This source code is licensed under the MIT license.
+-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Blockchain Explorer - Sample Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css" integrity="sha512-6qkvBbDyl5TDJtNJiC8foyEVuB6gxMBkrKy67XpqnIDxyvLLPJzmTjAj1dRJfNdmXWqD10VbJoeN4pOQqDwvRA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" integrity="sha256-pdY4ejLKO67E0CM2tbPtq1DJ3VGDVVdqAR6j3ZwdiE4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="./custom.css">
+</head>
+
+<body>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js" integrity="sha512-Yk47FuYNtuINE1w+t/KT4BQ7JaycTCcrvlSvdK/jry6Kcxqg5vN7/svVWCxZykVzzJHaxXk5T9jnFemZHSYgnw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.41.0/ace.min.js" integrity="sha512-flsyiGnpzyMMHGTb5iRwPNK2nObeYrmOryKKZmDYXeXpQeyaYnQdR97huozvxnnFrEADLqIHGFKoehUNDk/ZNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!--===================== NAVBAR =====================-->
+    <nav class="navbar bg-light" id="the_navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="?view=dashboard"><img src="./brand.gif" width="90" height="30" alt=""></a>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a name="chain_id" class="nav-link"><strong></strong></a>
+                </li>
+            </ul>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a name="user_id" class="nav-link"><i class="bi bi-person-circle ms-2"></i></a>
+                </li>
+            </ul>
+            <form class="d-flex" role="search" name="search">
+                <button class="btn btn-light" type="submit"><i class="bi bi-search"></i></button>
+                <input class="form-control me-2" type="search" />
+            </form>
+        </div>
+    </nav>
+
+    <!--===================== FIXED TOP NAVBAR =====================-->
+    <nav class="navbar fixed-top bg-light d-none" id="mini_navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="?view=dashboard"><img src="./brand.gif" width="90" height="30" alt=""></a>
+            <form class="d-flex" role="search" name="search">
+                <button class="btn btn-light" type="submit"><i class="bi bi-search"></i></button>
+                <input class="form-control me-2" type="search" />
+            </form>
+        </div>
+    </nav>
+
+    <!--===================== DASHBOARD =====================-->
+    <div class="container d-none" id="dashboard">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-2">
+                    <div class="card-body" style="height:300px;background:#ff8c40;">
+                        <div class="row">
+                            <div class="col-3">
+                                <a href="?view=peers">
+                                    <i class="bi bi-globe" style="font-size:2.5em;"></i>
+                                </a>
+                            </div>
+                            <div class="col-3">
+                                <h5>
+                                    <font color="white">N</font>
+                                </h5>
+                                <h5>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Number of authorities">
+                                        <font color="black" name="N">-</font>
+                                    </a>
+                                </h5>
+                            </div>
+                            <div class="col-3">
+                                <h5>
+                                    <font color="white">B</font>
+                                </h5>
+                                <h5>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="integrity tolerance of Byzantine faulty nodes">
+                                        <font color="black" name="B">-</font>
+                                    </a>
+                                </h5>
+                            </div>
+                            <div class="col-3">
+                                <h5>
+                                    <font color="white">F</font>
+                                </h5>
+                                <h5>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="availability tolerance of Faulty nodes">
+                                        <font color="black" name="F">-</font>
+                                    </a>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <h5>
+                                    <a href="?view=blocks" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="view list of blocks">
+                                        <font color="white">Blocks</font>
+                                    </a>
+                                </h5>
+                                <h5>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="total number of blocks">
+                                        <font color="black" name="num_blocks">-</font>
+                                    </a>
+                                </h5>
+                            </div>
+                            <div class="col-6 text-end">
+                                <h5>
+                                    <a href="?view=contracts" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="view list of contracts">
+                                        <font color="white">Contracts</font>
+                                    </a>
+                                </h5>
+                                <h5>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="total number of contracts">
+                                        <font color="black" name="num_contracts">-</font>
+                                    </a>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <h5>
+                                    <a href="?view=users" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="view list of users">
+                                        <font color="white">Users</font>
+                                    </a>
+                                </h5>
+                                <h5>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="total number of users">
+                                        <font color="black" name="num_users">-</font>
+                                    </a>
+                                </h5>
+                            </div>
+                            <div class="col-6 text-end">
+                                <h5>
+                                    <a href="?view=transactions" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="view list of transactions">
+                                        <font color="white">Transactions</font>
+                                    </a>
+                                </h5>
+                                <h5>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="total number of transactions">
+                                        <font color="black" name="num_transactions">-</font>
+                                    </a>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <h5>
+                                    <a href="?view=groups" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="view list of groups">
+                                        <font color="white">Groups</font>
+                                    </a>
+                                </h5>
+                                <h5>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="total number of groups">
+                                        <font color="black" name="num_groups">-</font>
+                                    </a>
+                                </h5>
+                            </div>
+                            <div class="col-6 text-end">
+                                <h5>
+                                    <a href="?view=domains" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="view list of domains">
+                                        <font color="white">Domains</font>
+                                    </a>
+                                </h5>
+                                <h5>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="total number of domains">
+                                        <font color="black" name="num_domains">-</font>
+                                    </a>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-2 d-none" name="recent_contracts">
+                    <div class="card-header clearfix">
+                        <span class="card-title">Recent Contracts</span>
+                        <a class="btn btn-outline-dark btn-sm float-end">View All</a>
+                    </div>
+                    <div class="card-body mCSB">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-2 d-none" name="recent_users">
+                    <div class="card-header clearfix">
+                        <span class="card-title">Recent Users</span>
+                        <a class="btn btn-outline-dark btn-sm float-end">View All</a>
+                    </div>
+                    <div class="card-body mCSB">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-2 d-none" name="recent_transactions">
+                    <div class="card-header clearfix">
+                        <span class="card-title">Recent Transactions</span>
+                        <a class="btn btn-outline-dark btn-sm float-end">View All</a>
+                    </div>
+                    <div class="card-body mCSB">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW A USER =====================-->
+    <div class="container d-none" id="a_user">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">User Profile</div>
+                <div class="header-id text-end" name="id"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="col-3">Configuration</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr name="name">
+                            <td name="edit">Name</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="description">
+                            <td name="edit">Description</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="wallets">
+                            <td name="edit">Wallets</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="callable_to">
+                            <td name="edit">Callable to</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="disclosed_to">
+                            <td name="edit">Disclosed to</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="multisig">
+                            <td name="edit">Multi SIG</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="domain">
+                            <td name="edit">Domain</td>
+                            <td name="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="col-3">Summary</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr name="groups">
+                            <td>Belonging Groups</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="aclgroups">
+                            <td>Belonging AclGroups</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="last_active">
+                            <td>Last active</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="created_at">
+                            <td>Created at</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="num_transactions">
+                            <td>#Transactions</td>
+                            <td name="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-2 d-none" name="recent_contracts">
+                    <div class="card-header clearfix">
+                        <span class="card-title">Recent Contracts</span>
+                        <a class="btn btn-outline-dark btn-sm float-end">View All</a>
+                    </div>
+                    <div class="card-body mCSB">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-2 d-none" name="recent_transactions">
+                    <div class="card-header clearfix">
+                        <span class="card-title">Recent Transactions</span>
+                        <a class="btn btn-outline-dark btn-sm float-end">View All</a>
+                    </div>
+                    <div class="card-body mCSB">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW A CONTRACT =====================-->
+    <div class="container d-none" id="a_contract">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Smart Contract</div>
+                <div class="header-id text-end" name="id"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="col-3">Configuration</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr name="name">
+                            <td name="edit">Name</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="description">
+                            <td name="edit">Description</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="argtypes">
+                            <td name="edit">Argtypes</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="code">
+                            <td name="edit">Code</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="mask">
+                            <td name="edit">Mask</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="maxsteps">
+                            <td name="edit">Max Steps</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="accessible_to">
+                            <td name="edit">Accessible to</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="callable_to">
+                            <td name="edit">Callable to</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="disclosed_to">
+                            <td name="edit">Disclosed to</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="domain">
+                            <td name="edit">Domain</td>
+                            <td name="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="col-3">Summary</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr name="type">
+                            <td>Type</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="groups">
+                            <td>Belonging Groups</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="aclgroups">
+                            <td>Belonging AclGroups</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="last_active">
+                            <td>Last active</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="created_at">
+                            <td>Created at</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="num_transactions">
+                            <td>#Transactions</td>
+                            <td name="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-2 d-none" name="recent_users">
+                    <div class="card-header clearfix">
+                        <span class="card-title">Recent Users</span>
+                        <a class="btn btn-outline-dark btn-sm float-end">View All</a>
+                    </div>
+                    <div class="card-body mCSB">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-2 d-none" name="recent_transactions">
+                    <div class="card-header clearfix">
+                        <span class="card-title">Recent Transactions</span>
+                        <a class="btn btn-outline-dark btn-sm float-end">View All</a>
+                    </div>
+                    <div class="card-body mCSB">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW A GROUP =====================-->
+    <div class="container d-none" id="a_group">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Group Profile</div>
+                <div class="header-id text-end" name="id"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="col-3">Configuration</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr name="name">
+                            <td name="edit">Name</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="description">
+                            <td name="edit">Description</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="aclgroup">
+                            <td name="edit">AclGroup</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="members">
+                            <td name="edit">Members</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="domain">
+                            <td name="edit">Domain</td>
+                            <td name="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="col-3">Summary</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr name="groups">
+                            <td>Super Groups</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="created_at">
+                            <td>Created at</td>
+                            <td name="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW A DOMAIN =====================-->
+    <div class="container d-none" id="a_domain">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Domain Profile</div>
+                <div class="header-id text-end" name="id"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="col-3">Configuration</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr name="name">
+                            <td name="edit">Name</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="description">
+                            <td name="edit">Description</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="code">
+                            <td name="edit">Init. Code</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="visible_to">
+                            <td name="edit">Visible to</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="managed_by">
+                            <td name="edit">Managed by</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="terminated_by">
+                            <td name="edit">Terminated by</td>
+                            <td name="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="col-3">Summary</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr name="users">
+                            <td>Users</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="groups">
+                            <td>Groups</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="contracts">
+                            <td>Contracts</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="created_at">
+                            <td>Created at</td>
+                            <td name="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-2 d-none" name="recent_contracts">
+                    <div class="card-header clearfix">
+                        <span class="card-title">Recent Contracts</span>
+                        <a class="btn btn-outline-dark btn-sm float-end">View All</a>
+                    </div>
+                    <div class="card-body mCSB">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-2 d-none" name="recent_users">
+                    <div class="card-header clearfix">
+                        <span class="card-title">Recent Users</span>
+                        <a class="btn btn-outline-dark btn-sm float-end">View All</a>
+                    </div>
+                    <div class="card-body mCSB">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW A TRANSACTION =====================-->
+    <div class="container d-none" id="a_transaction">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Transaction Record</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="col-3"></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr name="time">
+                            <td>Recorded at</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="blkno">
+                            <td>Block No.</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="txno">
+                            <td>Txno.</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="txid">
+                            <td>Txid</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="addr">
+                            <td>Wallet Address</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="caller_txno">
+                            <td>Caller Txno.</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="caller">
+                            <td>Caller</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="callee">
+                            <td>Callee</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="args">
+                            <td>Arguments</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="value">
+                            <td>Value</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="status">
+                            <td>Status</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="steps">
+                            <td>Steps</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="subtxs">
+                            <td>#Sub-transactions</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="related_to">
+                            <td>Related to</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="disclosed_to">
+                            <td>Additionally disclosed to</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="cur_disclosed_to">
+                            <td>Currently disclosed to</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="signed_by">
+                            <td>Signed by</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="blockref">
+                            <td>Block Ref.</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="pack">
+                            <td>Original Packet</td>
+                            <td name="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-outline-dark button-margin" name="nearby">Nearby Transactions</button>
+                <button type="button" class="btn btn-outline-dark button-margin" name="proof">Download Proof</button>
+                <a id="download_proof" download="" style="display:none;"></a>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW A BLOCK =====================-->
+    <div class="container d-none" id="a_block">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Block Information</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="col-3"></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr name="time">
+                            <td>Recorded at</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="blkno">
+                            <td>Block No.</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="blkseq">
+                            <td>Block Seq.</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="txnos">
+                            <td>Transactions</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="records">
+                            <td>#Records</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="status">
+                            <td>Status</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="seed">
+                            <td>Seed</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="hash">
+                            <td>Block Hash</td>
+                            <td name="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-outline-dark button-margin" name="nearby">Nearby Blocks</button>
+                <button type="button" class="btn btn-outline-dark button-margin" name="previous">Previous Block</button>
+                <button type="button" class="btn btn-outline-dark button-margin" name="next">Next Block</button>
+                <button type="button" class="btn btn-outline-dark button-margin" name="verify">Verify</button>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW A PEER =====================-->
+    <div class="container d-none" id="a_peer">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Peer Information</div>
+                <div class="header-id text-end" name="id"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="col-3"></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr name="name">
+                            <td name="edit">Name</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="description">
+                            <td name="edit">Description</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="authority">
+                            <td name="edit">Authority</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="host">
+                            <td name="edit">Host</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="port">
+                            <td name="edit">Port</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="pubkey">
+                            <td name="edit">Pubkey</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="pubkey2">
+                            <td name="edit">Pubkey2</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="url">
+                            <td name="edit">URL</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="domain">
+                            <td name="edit">Domain</td>
+                            <td name="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-fixed-layout">
+                    <thead>
+                        <tr>
+                            <th class="col-3">Summary</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr name="version">
+                            <td>Version</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="blkseq">
+                            <td>Block Seq.</td>
+                            <td name="value"></td>
+                        </tr>
+                        <tr name="count_votes">
+                            <td>#Votes</td>
+                            <td name="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW LIST OF USERS =====================-->
+    <div class="container d-none" id="users_list">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Users List</div>
+                <div class="header-id text-end d-none" name="callee">Callee </div>
+                <div class="header-id text-end d-none" name="domain">Domain </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped d-none">
+                    <thead class="thead-sticky">
+                        <tr>
+                            <th>Name</th>
+                            <th>ID</th>
+                            <th>Domain</th>
+                            <th name="last_active">Last Active</th>
+                            <th name="created_at">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" name="view_more_before" class="alert alert-warning text-center"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW LIST OF CONTRACTS =====================-->
+    <div class="container d-none" id="contracts_list">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Contracts List</div>
+                <div class="header-id text-end d-none" name="caller">Caller </div>
+                <div class="header-id text-end d-none" name="domain">Domain </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped d-none">
+                    <thead class="thead-sticky">
+                        <tr>
+                            <th>Name</th>
+                            <th>ID</th>
+                            <th>Domain</th>
+                            <th name="last_active">Last Active</th>
+                            <th name="created_at">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" name="view_more_before" class="alert alert-warning text-center"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW LIST OF GROUPS =====================-->
+    <div class="container d-none" id="groups_list">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Groups List</div>
+                <div class="header-id text-end d-none" name="domain">Domain </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped d-none">
+                    <thead class="thead-sticky">
+                        <tr>
+                            <th>Name</th>
+                            <th>ID</th>
+                            <th>Domain</th>
+                            <th name="created_at">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" name="view_more_before" class="alert alert-warning text-center"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW LIST OF GROUP MEMBERS =====================-->
+    <div class="container d-none" id="group_members_list">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Group Members List</div>
+                <div class="header-id text-end d-none" name="id"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped d-none">
+                    <thead class="thead-sticky">
+                        <tr>
+                            <th>Name</th>
+                            <th>ID</th>
+                            <th name="created_at">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" name="view_more_before" class="alert alert-warning text-center"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW LIST OF SUPER ACLGROUPS =====================-->
+    <div class="container d-none" id="super_aclgroups_list">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Super AclGroups List</div>
+                <div class="header-id text-end d-none" name="id"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped d-none">
+                    <thead class="thead-sticky">
+                        <tr>
+                            <th>Name</th>
+                            <th>ID</th>
+                            <th name="created_at">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" name="view_more_before" class="alert alert-warning text-center"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW LIST OF DOMAINS =====================-->
+    <div class="container d-none" id="domains_list">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Domains List</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped d-none">
+                    <thead class="thead-sticky">
+                        <tr>
+                            <th>Name</th>
+                            <th>ID</th>
+                            <th>Description</th>
+                            <th name="created_at">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" name="view_more_before" class="alert alert-warning text-center"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW LIST OF TRANSACTIONS =====================-->
+    <div class="container d-none" id="transactions_list">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Transactions List
+                    <button class="btn btn-outline-dark btn-xs">show details</button>
+                </div>
+                <div class="header-id text-end d-none" name="user">User </div>
+                <div class="header-id text-end d-none" name="contract">Contract </div>
+                <div class="header-id text-end d-none" name="caller">Caller </div>
+                <div class="header-id text-end d-none" name="callee">Callee </div>
+                <div class="header-id text-end d-none" name="related_to">Related to </div>
+                <div class="header-id text-end d-none" name="status">Status </div>
+                <div class="header-id text-end d-none" name="date">Around Date </div>
+                <div class="header-id text-end d-none" name="txno">Around Txno. </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped d-none">
+                    <thead class="thead-sticky">
+                        <tr>
+                            <th>Txno.</th>
+                            <th>Caller</th>
+                            <th>Callee</th>
+                            <th>Status</th>
+                            <th>Recorded at</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td colspan="5" name="view_more_after" class="alert alert-warning d-none text-center"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" name="view_more_before" class="alert alert-warning d-none text-center"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW LIST OF TRANSACTIONS (WITH DETAILS) =====================-->
+    <div class="container d-none" id="transactions_list_detail">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Transactions List
+                    <button class="btn btn-outline-dark btn-xs">hide details</button>
+                </div>
+                <div class="header-id text-end d-none" name="user">User </div>
+                <div class="header-id text-end d-none" name="contract">Contract </div>
+                <div class="header-id text-end d-none" name="caller">Caller </div>
+                <div class="header-id text-end d-none" name="callee">Callee </div>
+                <div class="header-id text-end d-none" name="status">Status </div>
+                <div class="header-id text-end d-none" name="related_to">Related to </div>
+                <div class="header-id text-end d-none" name="date">Around Date </div>
+                <div class="header-id text-end d-none" name="txno">Around Txno. </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped table-tx-detail-list d-none">
+                    <thead class="thead-sticky">
+                        <tr>
+                            <th style="border-bottom: 0px;">Txno.</th>
+                            <th style="border-bottom: 0px;">Caller</th>
+                            <th style="border-bottom: 0px;">Callee</th>
+                            <th style="border-bottom: 0px;">Status</th>
+                            <th style="border-bottom: 0px;">Recorded at</th>
+                        </tr>
+                        <tr style="border-bottom: 2px solid;">
+                            <th style="border-bottom: 0px;"></th>
+                            <th style="border-bottom: 0px;">Arguments</th>
+                            <th style="border-bottom: 0px;">Value</th>
+                            <th style="border-bottom: 0px;">From</th>
+                            <th style="border-bottom: 0px;">Block No.</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr style="border-bottom: 2px solid;">
+                            <td colspan="5" name="view_more_after" class="alert alert-warning d-none text-center"></td>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" name="view_more_before" class="alert alert-warning d-none text-center"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW LIST OF BLOCKS =====================-->
+    <div class="container d-none" id="blocks_list">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Blocks List</div>
+                <div class="header-id text-end d-none" name="date">Around Date </div>
+                <div class="header-id text-end d-none" name="blkno">Around Block No. </div>
+                <div class="header-id text-end d-none" name="txno">Around Txno. </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped d-none">
+                    <thead class="thead-sticky">
+                        <tr>
+                            <th>Block No.</th>
+                            <th>Txno.</th>
+                            <th>Block Hash</th>
+                            <th>Recorded at</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td colspan="4" name="view_more_after" class="alert alert-warning d-none text-center"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" name="view_more_before" class="alert alert-warning d-none text-center"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW LIST OF PEERS =====================-->
+    <div class="container d-none" id="peers_list">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Peers List</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped d-none">
+                    <thead class="thead-sticky">
+                        <tr>
+                            <th>Name</th>
+                            <th>ID</th>
+                            <th>Domain</th>
+                            <th>Authority</th>
+                            <th>Version</th>
+                            <th>Block Seq.</th>
+                            <th>Last Activity Seen</th>
+                        </tr>
+                    </thead>
+                    <tbody name="peers_list">
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7" name="view_more_before" class="alert alert-warning text-center"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW LIST OF SEARCH RESULTS =====================-->
+    <div class="container d-none" id="search_results">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="header-title">Search Results</div>
+                <div class="header-id text-end" name="for">For &quot;<span></span>&quot;</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped d-none">
+                    <thead class="thead-sticky">
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <div name="not_found" class="alert alert-danger d-none text-center">Not Found</div>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW AN ERROR =====================-->
+    <div class="modal fade" id="fatal_error" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center"><i class="bi bi-question-circle"></i> Fatal Error</h4>
+                </div>
+                <div class="modal-body">
+                    <div name="alert">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW AN INFORMATION =====================-->
+    <div class="modal fade" id="information_diag" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center"><i class="bi bi-info-circle"></i> Information</h4>
+                </div>
+                <div class="modal-body">
+                    <div name="alert">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== SHOW A WARNING =====================-->
+    <div class="modal fade" id="warning_diag" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center"><i class="bi bi-info-circle"></i> Warning</h4>
+                </div>
+                <div class="modal-body">
+                    <div name="alert">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== VIEW CODE DIALOG =====================-->
+    <div class="modal fade" id="view_code" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center">
+                        <i class="bi bi-code"></i> View Code
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="row d-none" name="argtypes">
+                            <div class="col-3">
+                                <label>Argtypes</label>
+                            </div>
+                            <div class="col-9">
+                                <div class="form-control thin-horizontal-scrollbar"></div>
+                            </div>
+                        </div>
+                        <div name="code">
+                            <label>Code</label>
+                            <div name="editor">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== LOGIN DIALOG =====================-->
+    <div class="modal fade" id="login_diag" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center">
+                        <i class="bi bi-person-circle"></i> Log In
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col">
+                                BC+のウォレットアプリで下のQRコードを読み込み、ウォレットを委託してください。
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-auto">
+                                <canvas data-bs-trigger="manual" data-bs-title="Code copied"></canvas>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                代理アドレス: <span name="proxy-address"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== LOGOUT DIALOG =====================-->
+    <div class="modal fade" id="logout_diag" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center"><i class="bi bi-info-circle"></i> Logout?</h4>
+                </div>
+                <div class="modal-body text-center">
+                    ログアウトしますか？
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" name="ok">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--===================== LIBRARIES =====================-->
+
+    <script type="module">
+        import * as api from './dncware-blockchain-browser-api.mjs';
+        window.api = api;
+        api.setEthersModule(await import("https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.5/ethers.min.js"));
+
+    </script>
+
+    <script src="./config.js"></script>
+    <script src="./util.js"></script>
+    <script src="./navbar.js"></script>
+    <script src="./dialogs.js"></script>
+    <script src="./dashboard.js"></script>
+    <script src="./listview.js"></script>
+    <script src="./proof.js"></script>
+
+</body>
+
+</html>
